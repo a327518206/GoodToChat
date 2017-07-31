@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -20,9 +21,9 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:background="@android:color/black"
-                android:fitsSystemWindows="true" />
+                android:fitsSystemWindows="true"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
             <TextView
@@ -33,16 +34,17 @@
                 android:text="好有消息"
                 android:textColor="#ffffff"
                 android:textSize="18sp" />
+
             <ImageButton
-                android:scaleType="fitXY"
                 android:id="@+id/ib_add_to"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="8dp"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ib_add_to"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_width="20dp"
-                android:layout_height="20dp" />
+                android:scaleType="fitXY"
+                android:src="@drawable/ib_add_to" />
         </RelativeLayout>
 
         <FrameLayout
@@ -52,38 +54,81 @@
             android:layout_weight="1" />
 
 
-        <RadioGroup
-            android:id="@+id/rg_bottom_tag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="#11000000"
-            android:orientation="horizontal"
-            android:paddingBottom="2dp"
-            android:paddingTop="8dp">
 
 
-            <RadioButton
-                android:id="@+id/rb_message"
-                style="@style/rb_style"
-                android:drawableTop="@drawable/rb_message_selector"
-                android:text="消息" />
 
-            <RadioButton
-                android:id="@+id/rb_address_list"
-                style="@style/rb_style"
-                android:drawableTop="@drawable/rb_address_list_selector"
-                android:text="通讯录" />
-
-            <RadioButton
-                android:id="@+id/rb_my_setting"
-                style="@style/rb_style"
-                android:drawableTop="@drawable/rb_my_setting_selector"
-                android:text="我" />
+            <RadioGroup
+                android:id="@+id/rg_bottom_tag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#11000000"
+                android:orientation="horizontal"
+                android:paddingBottom="2dp"
+                android:paddingTop="8dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
 
 
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/rb_message"
+                    style="@style/rb_style"
+                    android:drawableTop="@drawable/rb_message_selector"
+                    android:text="消息" />
 
+
+
+
+                <RadioButton
+                    android:id="@+id/rb_address_list"
+                    style="@style/rb_style"
+                    android:drawableTop="@drawable/rb_address_list_selector"
+                    android:text="通讯录" />
+
+
+
+
+                <RadioButton
+                    android:id="@+id/rb_friend_of_world"
+                    style="@style/rb_style"
+                    android:drawableTop="@drawable/rb_friend_of_world_selector"
+                    android:text="有界" />
+
+
+            </RadioGroup>
     </LinearLayout>
 
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        app:menu="@menu/nav_menu" />
+
 </android.support.v4.widget.DrawerLayout>
+
+<!--
+<RelativeLayout
+android:layout_width="match_parent"
+android:layout_height="50dp">
+<ImageView
+    android:id="@+id/iv_msg_red_point"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/iv_red_point"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true" />
+<ImageView
+    android:id="@+id/iv_addresslist_red_point"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_toRightOf="@+id/rb_address_list"
+    android:background="@drawable/iv_red_point" />
+<ImageView
+    android:id="@+id/iv_world_red_point"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_toRightOf="@+id/rb_friend_of_world"
+    android:background="@drawable/iv_red_point"
+    android:visibility="gone" />
+</RelativeLayout>-->

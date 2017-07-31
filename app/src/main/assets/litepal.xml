@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<litepal>
+    <dbname value="Testdb"></dbname>
+
+    <version value="5"></version>
+
+    <list>
+        <mapping class="com.xiaoluogo.goodtochat.db.Friend"></mapping>
+        <mapping class="com.xiaoluogo.goodtochat.db.NewFriend"></mapping>
+        <mapping class="com.xiaoluogo.goodtochat.db.ChatMessage"></mapping>
+        <mapping class="com.xiaoluogo.goodtochat.db.Group2Chat"></mapping>
+        <mapping class="com.xiaoluogo.goodtochat.db.ChatDialog"></mapping>
+    </list>
+</litepal>

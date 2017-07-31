@@ -5,18 +5,18 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/primary_dark</item>
     </style>
 
     <!-- 5.0以下系统使用默认的风格 -->
     <style name="MainActivityTheme" parent="AppTheme">
 
     </style>
-
+    layout_centerHorizontal="true"
 
     <!-- 底部radiobutton风格 -->
     <style name="rb_style">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:drawablePadding">2dp</item>
@@ -24,6 +24,16 @@
         <item name="android:button">@null</item>
         <item name="android:textColor">@drawable/rb_text_selector</item>
         <item name="android:gravity">center</item>
+    </style>
+
+
+    <!-- send消息 -->
+    <style name="send_message">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxWidth">225.0dip</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:layout_marginRight">5dp</item>
     </style>
 
 </resources>
