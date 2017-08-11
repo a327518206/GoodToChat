@@ -26,6 +26,7 @@ import java.util.Map;
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMAudioMessage;
 import cn.bmob.newim.bean.BmobIMConversation;
+import cn.bmob.newim.bean.BmobIMImageMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
 import cn.bmob.newim.bean.BmobIMMessageType;
 import cn.bmob.newim.bean.BmobIMUserInfo;
@@ -340,9 +341,14 @@ public class BmobUtils extends BaseBmobUtils {
             }
         });
 
-
         if (type == 1 || type == 2) {
             cmsg.setMessage(msg.getContent());
+        } else if (type == 3 || type == 4) {
+            if (type == 3) {
+                cmsg.setMessage(BmobIMImageMessage.buildFromDB(true, msg).getLocalPath());
+            } else {
+                cmsg.setMessage(BmobIMImageMessage.buildFromDB(true, msg).getRemoteUrl());
+            }
         } else if (type == 7 || type == 8) {
             if (type == 7) {
                 cmsg.setMessage(msg.getContent().split("&")[0]);

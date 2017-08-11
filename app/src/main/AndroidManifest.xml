@@ -74,7 +74,7 @@
         <activity android:name=".other.InfoActivity" />
         <activity android:name=".other.SearchUserActivity" />
         <activity android:name=".activity.NewFriendsActivity" />
-        <activity android:name=".activity.ChatActivity" />
+        <activity android:name=".activity.ChatActivity" android:launchMode="singleTask" />
         <activity android:name=".other.PhotoActivity" />
 
         <provider

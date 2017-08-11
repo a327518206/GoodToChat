@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.xiaoluogo.bottomnavigation.BottomNavigation
+        android:id="@+id/bottom_navigation"
+        app:button_sum="5"
+        app:normal_text_color="#000000"
+        app:checked_text_color="#ff00ff"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true" />
+    <TextView
+        android:id="@+id/text"
+        android:text="1"
+        android:textSize="40dp"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BottomButton" >
+        <attr name="text" format="string"/>
+        <attr name="normalColor" format="color"/>
+        <attr name="checkedColor" format="color"/>
+        <attr name="hint_visibility" >
+            <enum name="visibility" value="0x00000000"/>
+            <enum name="gone" value="0x00000008"/>
+        </attr>
+        <attr name="hint_num" format="string"/>
+        <attr name="imgbackground" format="reference"/>
+        <attr name="checked" format="boolean"/>
+    </declare-styleable>
+</resources>

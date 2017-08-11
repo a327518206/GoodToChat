@@ -75,6 +75,8 @@ public class MessageListPagerAdapter extends RecyclerView.Adapter<MessageListPag
         }
         if (mdatas.get(position).getMsgType() == 1 || mdatas.get(position).getMsgType() == 2) {
             holder.tv_last_message_content.setText(mdatas.get(position).getMsgContent());
+        }else if(mdatas.get(position).getMsgType() == 3 || mdatas.get(position).getMsgType() == 4){
+            holder.tv_last_message_content.setText("[图片]");
         } else if (mdatas.get(position).getMsgType() == 7 || mdatas.get(position).getMsgType() == 8) {
             holder.tv_last_message_content.setText("[语音]");
         }

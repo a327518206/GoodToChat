@@ -59,9 +59,13 @@
 
             <ImageView
                 android:id="@+id/iv_send_image"
-                style="@style/send_message"
+                android:layout_width="100dp"
+                android:padding="1dp"
+                android:layout_height="wrap_content"
+                android:scaleType="fitCenter"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/ib_send_message_bg"
                 android:gravity="center"
-                android:minWidth="40dp"
                 android:visibility="gone" />
 
             <LinearLayout

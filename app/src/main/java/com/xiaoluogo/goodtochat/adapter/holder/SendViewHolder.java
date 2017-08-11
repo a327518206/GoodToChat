@@ -84,9 +84,7 @@ public class SendViewHolder extends BaseViewHolder {
             tv_voice_length.setText(data.getDuration());
             tv_voice_length.setVisibility(View.VISIBLE);
             iv_send_voice.setOnClickListener(new NewRecordPlayClickListener(mContext, data, iv_send_voice));
-        } else if (itemViewType == 9)
-
-        {
+        } else if (itemViewType == 9) {
         }
 
         int status = data.getSendOrReceive();

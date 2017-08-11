@@ -1,9 +1,11 @@
 package com.xiaoluogo.goodtochat.other;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -21,6 +23,8 @@ import com.xiaoluogo.goodtochat.BmobIMApplication;
 import com.xiaoluogo.goodtochat.R;
 import com.xiaoluogo.goodtochat.activity.ChatActivity;
 import com.xiaoluogo.goodtochat.activity.LoginActivity;
+import com.xiaoluogo.goodtochat.db.ChatDialog;
+import com.xiaoluogo.goodtochat.db.ChatMessage;
 import com.xiaoluogo.goodtochat.db.Friend;
 import com.xiaoluogo.goodtochat.db.NewFriend;
 import com.xiaoluogo.goodtochat.doman.AddFriendMessage;
@@ -29,6 +33,8 @@ import com.xiaoluogo.goodtochat.utils.BmobUtils;
 import com.xiaoluogo.goodtochat.utils.CacheUtils;
 import com.xiaoluogo.goodtochat.utils.Constants;
 import com.xiaoluogo.goodtochat.utils.L;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +49,7 @@ import cn.bmob.newim.listener.MessageSendListener;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * 信息页面
@@ -155,6 +162,7 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.btn_delete_friend://删除好友
+                deleteFriend();
                 break;
             case R.id.btn_add_friend://添加好友
                 L.e(mfriend.getNickName() + "," + mfriend.getObjectId());
@@ -178,6 +186,51 @@ public class InfoActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(intent);
                 break;
         }
+    }
+
+    private void deleteFriend() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("删除好友");
+        builder.setMessage("是否删除好友,删除好友将会聊天内容一并删除");
+        builder.setNegativeButton("取消",null);
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String fId = mfriend.getObjectId();
+                DataSupport.deleteAll(Friend.class,"objectId = ?",fId);
+                DataSupport.deleteAll(ChatMessage.class, "objectId = ?", fId);
+                DataSupport.deleteAll(ChatDialog.class, "objectId = ?", fId);
+                UserBean userBean = BmobUser.getCurrentUser(UserBean.class);
+                List<String> fs = userBean.getFriends();
+                fs.remove(fId);
+                userBean.setFriends(fs);
+                userBean.update(userBean.getObjectId(), new UpdateListener() {
+
+                    @Override
+                    public void done(BmobException e) {
+                        if(e==null){
+                            Toast.makeText(InfoActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                        }else{
+                        }
+                    }
+
+                });
+//                List<String> sf = mfriend.getFriends();
+//                sf.remove(userBean.getObjectId());
+//                mfriend.update(userBean.getObjectId(), new UpdateListener() {
+//
+//                    @Override
+//                    public void done(BmobException e) {
+//                        if(e==null){
+//                            Toast.makeText(InfoActivity.this, "好友列表中删除成功", Toast.LENGTH_SHORT).show();
+//                        }else{
+//                        }
+//                    }
+//
+//                });
+            }
+        });
+        builder.show();
     }
 
     /**

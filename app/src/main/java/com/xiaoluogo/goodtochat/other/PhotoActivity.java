@@ -53,6 +53,7 @@ import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.xiaoluogo.goodtochat.R;
 import com.xiaoluogo.goodtochat.doman.UserBean;
+import com.xiaoluogo.goodtochat.utils.Constants;
 import com.xiaoluogo.goodtochat.utils.L;
 
 import java.io.File;
@@ -81,14 +82,14 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
      * 更新进度
      */
     private static final int UPDATE_PROGRESS = 3;
-    /**
-     * 打开相机
-     */
-    private static final int TAKE_PHOTO = 1;
-    /**
-     * 相册中选择图片
-     */
-    public static final int CHOOSE_PHOTO = 2;
+//    /**
+//     * 打开相机
+//     */
+//    private static final int TAKE_PHOTO = 1;
+//    /**
+//     * 相册中选择图片
+//     */
+//    public static final int CHOOSE_PHOTO = 2;
     private Toolbar toolbarPhoto;
     private TextView tvPhotoTitle;
     private Button btnChangeHeader;
@@ -240,9 +241,12 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * 打开相机
+     */
     private void openCamera() {
         try {
-            File outputImage = new File(getExternalCacheDir(), user.getNickName() + System.currentTimeMillis());
+            File outputImage = new File(getExternalCacheDir(), ""+System.currentTimeMillis());
             outputImage.createNewFile();
             if (Build.VERSION.SDK_INT >= 24) {
                 imageUri = FileProvider.getUriForFile(PhotoActivity.this, "com.xiaoluogo.goodtochat.fileprovider", outputImage);
@@ -251,7 +255,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
             }
             Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-            startActivityForResult(intent, TAKE_PHOTO);
+            startActivityForResult(intent, Constants.TAKE_PHOTO);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
@@ -324,7 +328,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
     private void openAlbum() {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType("image/*");
-        startActivityForResult(intent, CHOOSE_PHOTO);
+        startActivityForResult(intent, Constants.CHOOSE_PHOTO);
     }
 
     @Override
@@ -345,13 +349,13 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case TAKE_PHOTO:
+            case Constants.TAKE_PHOTO:
                 if (resultCode == RESULT_OK) {
                     currentUri = imageUri.getPath();
                     loadPhoto(currentUri);
                 }
                 break;
-            case CHOOSE_PHOTO:
+            case Constants.CHOOSE_PHOTO:
                 if (resultCode == RESULT_OK) {
                     if (Build.VERSION.SDK_INT >= 19) {
                         //4.4版本以上用这个

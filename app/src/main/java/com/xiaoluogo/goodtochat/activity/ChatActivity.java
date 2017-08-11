@@ -1,12 +1,18 @@
 package com.xiaoluogo.goodtochat.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,25 +27,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xiaoluogo.goodtochat.BmobIMApplication;
 import com.xiaoluogo.goodtochat.R;
 import com.xiaoluogo.goodtochat.adapter.ChatAdapter;
-import com.xiaoluogo.goodtochat.db.ChatDialog;
 import com.xiaoluogo.goodtochat.db.ChatMessage;
 import com.xiaoluogo.goodtochat.doman.UserBean;
-import com.xiaoluogo.goodtochat.event.RefreshEvent;
-import com.xiaoluogo.goodtochat.other.InfoActivity;
+import com.xiaoluogo.goodtochat.other.PhotoActivity;
 import com.xiaoluogo.goodtochat.utils.BmobUtils;
 import com.xiaoluogo.goodtochat.utils.Constants;
 import com.xiaoluogo.goodtochat.utils.L;
+import com.xiaoluogo.goodtochat.utils.PhotoAndCamera;
 import com.xiaoluogo.goodtochat.utils.Utils;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.crud.DataSupport;
@@ -53,8 +57,8 @@ import java.util.Map;
 import cn.bmob.newim.BmobIM;
 import cn.bmob.newim.bean.BmobIMAudioMessage;
 import cn.bmob.newim.bean.BmobIMConversation;
+import cn.bmob.newim.bean.BmobIMImageMessage;
 import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMMessageType;
 import cn.bmob.newim.bean.BmobIMTextMessage;
 import cn.bmob.newim.core.BmobIMClient;
 import cn.bmob.newim.core.BmobRecordManager;
@@ -74,6 +78,8 @@ import cn.bmob.v3.BmobUser;
  */
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener, MessageListHandler {
 
+    private static final int SHOW_MORE = 0;
+    private static final int HIDE_MORE = 1;
     private Toolbar chatToolbar;
     private TextView tvChatTitle;
     private ImageButton ibTextOrVoice;
@@ -82,7 +88,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton ibMore;
     private ImageButton ibSendMessage;
     private RecyclerView recyclerview_message;
-//    private ScrollView scrollview_chat;
+    //    private ScrollView scrollview_chat;
+    private LinearLayout ll_more;
+    private TextView tv_more_picture;
+    private TextView tv_more_camera;
+    private TextView tv_more_map;
 
     private boolean isVoice = false;
 
@@ -98,6 +108,12 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView iv_record;
     private Drawable[] drawable_Anims;// 话筒动画
     private BmobRecordManager recordManager;
+    //更多菜单是否打开
+    private boolean moreIsOpen;
+
+    private PhotoAndCamera photoAndCamera;
+    //当前的图片路径
+    private String currentUri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,6 +128,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 //            }
 //            i++;
 //        }
+        photoAndCamera = new PhotoAndCamera(this);
         c = BmobIMConversation.obtain(BmobIMClient.getInstance(), (BmobIMConversation) getIntent().getSerializableExtra("c"));
         mfriend = (UserBean) getIntent().getSerializableExtra("friend_user");
         findViews();
@@ -144,7 +161,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         layout_record = (RelativeLayout) findViewById(R.id.layout_record);
         tv_voice_tips = (TextView) findViewById(R.id.tv_voice_tips);
         iv_record = (ImageView) findViewById(R.id.iv_record);
+        ll_more = (LinearLayout) findViewById(R.id.ll_more);
+        tv_more_picture = (TextView) findViewById(R.id.tv_more_picture);
+        tv_more_camera = (TextView) findViewById(R.id.tv_more_camera);
+        tv_more_map = (TextView) findViewById(R.id.tv_more_map);
 //        scrollview_chat = (ScrollView) findViewById(R.id.scrollview_chat);
+
+        ll_more.setVisibility(View.GONE);
+        moreIsOpen = false;
 
         recyclerview_message.setHasFixedSize(true);
         recyclerview_message.setNestedScrollingEnabled(false);
@@ -153,12 +177,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         btnSendVoice.setOnClickListener(this);
         ibMore.setOnClickListener(this);
         ibSendMessage.setOnClickListener(this);
-        etMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrollToBottom();
-            }
-        });
+        etMessage.setOnClickListener(this);
+        tv_more_picture.setOnClickListener(this);
+        tv_more_camera.setOnClickListener(this);
+        tv_more_map.setOnClickListener(this);
 
         manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerview_message.setLayoutManager(manager);
@@ -202,11 +224,112 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 //                break;
             case R.id.ib_more:
                 Toast.makeText(this, "更多", Toast.LENGTH_SHORT).show();
+                showOrHideMenu();
                 break;
             case R.id.ib_send_message:
                 Toast.makeText(this, "发送消息", Toast.LENGTH_SHORT).show();
                 sendMessage();
                 break;
+            case R.id.et_message:
+                Toast.makeText(this, "编辑消息", Toast.LENGTH_SHORT).show();
+                scrollToBottom();
+                moreIsOpen = false;
+                ll_more.setVisibility(View.GONE);
+                break;
+            case R.id.tv_more_picture:
+                Toast.makeText(this, "选择图片", Toast.LENGTH_SHORT).show();
+                //检查运行时期权限
+                if (ContextCompat.checkSelfPermission(ChatActivity.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(ChatActivity.this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    photoAndCamera.openAlbum();
+                }
+                break;
+            case R.id.tv_more_camera:
+                Toast.makeText(this, "打开相机", Toast.LENGTH_SHORT).show();
+                photoAndCamera.openCamera();
+                break;
+            case R.id.tv_more_map:
+                Toast.makeText(this, "发送位置", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    /**
+     * 运行时期权限检查返回请求权限结果
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    photoAndCamera.openAlbum();
+                } else {
+                    Toast.makeText(this, "请打开相册权限", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 取到活动返回的数据
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case Constants.TAKE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    currentUri = photoAndCamera.imageUri.getPath();
+                }
+                break;
+            case Constants.CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        //4.4版本以上用这个
+                        currentUri = photoAndCamera.handleImageOnKitKat(data);
+                    } else {
+                        currentUri = photoAndCamera.handleImageBeforeKitKat(data);
+                    }
+                }
+                break;
+        }
+        if(currentUri != null){
+            sendImageMessage();
+        }
+    }
+
+    /**
+     * 发送图片消息
+     */
+    private void sendImageMessage() {
+        BmobIMImageMessage image = new BmobIMImageMessage(currentUri);
+        c.sendMessage(image,listener);
+    }
+
+    /**
+     * 显示隐藏菜单
+     */
+    private void showOrHideMenu() {
+        if (moreIsOpen) {
+            moreIsOpen = false;
+            ll_more.setVisibility(View.GONE);
+        } else {
+            InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm.isActive()) {
+                imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+            moreIsOpen = true;
+            ll_more.setVisibility(View.VISIBLE);
         }
     }
 
@@ -259,6 +382,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
+
 
 //    /**
 //     * 将消息转换

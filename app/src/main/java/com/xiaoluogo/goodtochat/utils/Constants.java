@@ -43,4 +43,13 @@ public class Constants {
      * 是否在InfoActivity页面
      */
     public static boolean IS_IN_CHAT_ACTIVITY = false;
+
+    /**
+     * 打开相机
+     */
+    public static final int TAKE_PHOTO = 1;
+    /**
+     * 相册中选择图片
+     */
+    public static final int CHOOSE_PHOTO = 2;
 }

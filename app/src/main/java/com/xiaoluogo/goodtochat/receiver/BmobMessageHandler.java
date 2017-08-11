@@ -105,7 +105,7 @@ public class BmobMessageHandler extends BmobIMMessageHandler {
 ////                    } else {//直接发送消息事件
 //////                        Logger.i("当前处于应用内，发送event");
 //                    }else
-                        if(!Constants.IS_IN_CHAT_ACTIVITY){
+                    if (!Constants.IS_IN_CHAT_ACTIVITY) {
                         Intent pendingIntent = new Intent(context, MainActivity.class);
                         pendingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         //1、多个用户的多条消息合并成一条通知：有XX个联系人发来了XX条消息
