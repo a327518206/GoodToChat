@@ -74,8 +74,11 @@
         <activity android:name=".other.InfoActivity" />
         <activity android:name=".other.SearchUserActivity" />
         <activity android:name=".activity.NewFriendsActivity" />
-        <activity android:name=".activity.ChatActivity" android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.ChatActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".other.PhotoActivity" />
+        <activity android:name=".weather.view.WeatherActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -85,10 +88,16 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-
         </provider>
 
-
+        <service
+            android:name=".weather.service.WeatherService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.xiaoluogo.goodtochat_AUTO_UPDATE_WEATHER"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -1,11 +1,7 @@
 package com.xiaoluogo.goodtochat.utils;
 
 import android.content.Context;
-import android.content.Intent;
-import android.view.View;
 
-import com.xiaoluogo.goodtochat.activity.LoginActivity;
-import com.xiaoluogo.goodtochat.activity.MainActivity;
 import com.xiaoluogo.goodtochat.db.ChatDialog;
 import com.xiaoluogo.goodtochat.db.ChatMessage;
 import com.xiaoluogo.goodtochat.db.Friend;
@@ -373,8 +369,18 @@ public class BmobUtils extends BaseBmobUtils {
      *
      * @param cmsg
      */
-    public void saveChatMsg2DB(ChatMessage cmsg) {
+    public boolean saveChatMsg2DB(ChatMessage cmsg) {
+        ChatMessage mmm = DataSupport.findLast(ChatMessage.class);
+        if(mmm.getMessageType() == cmsg.getMessageType() &&
+                mmm.getMessage().equals(cmsg.getMessage())
+                && mmm.getPrivateOrGroup() == cmsg.getPrivateOrGroup()
+                && mmm.getMessageTime().equals(cmsg.getMessageTime())
+                && mmm.getSendOrReceive() == cmsg.getSendOrReceive()
+                && mmm.getObjectId().equals(cmsg.getObjectId())){
+            return false;
+        }
         cmsg.save();
+        return true;
     }
 
     private int getRealType(BmobIMMessage msg) {

@@ -2,7 +2,6 @@ package com.xiaoluogo.goodtochat.receiver;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.Toast;
@@ -16,10 +15,7 @@ import com.xiaoluogo.goodtochat.db.NewFriendManager;
 import com.xiaoluogo.goodtochat.doman.AddFriendMessage;
 import com.xiaoluogo.goodtochat.doman.AgreeAddFriendMessage;
 import com.xiaoluogo.goodtochat.doman.UserBean;
-import com.xiaoluogo.goodtochat.event.ChatEvent;
 import com.xiaoluogo.goodtochat.event.RefreshEvent;
-import com.xiaoluogo.goodtochat.other.InfoActivity;
-import com.xiaoluogo.goodtochat.pager.MessageListFragment;
 import com.xiaoluogo.goodtochat.utils.BmobUtils;
 import com.xiaoluogo.goodtochat.utils.Constants;
 import com.xiaoluogo.goodtochat.utils.L;
@@ -40,6 +36,7 @@ import cn.bmob.newim.listener.BmobIMMessageHandler;
 import cn.bmob.newim.notification.BmobNotificationManager;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
+import de.greenrobot.dao.DaoException;
 
 /**
  * 自定义消息接收器处理在线消息和离线消息
@@ -118,16 +115,21 @@ public class BmobMessageHandler extends BmobIMMessageHandler {
                                 info.getName(), msg.getContent(), "您有一条新消息", pendingIntent);
 
                     }
-                    ChatMessage message = BmobUtils.getInstance().msg2ChatMsg(msg);
-                    message.setSendOrReceive(2);
-                    BmobUtils.getInstance().saveChatMsg2DB(message);
-                    BmobUtils.getInstance().saveDialog(message);
-                    EventBus.getDefault().post(event);
-                    EventBus.getDefault().post(new RefreshEvent("来消息了"));
+                    try {
+                        ChatMessage message = BmobUtils.getInstance().msg2ChatMsg(msg);
+                        message.setSendOrReceive(2);
+                        BmobUtils.getInstance().saveChatMsg2DB(message);
+                        BmobUtils.getInstance().saveDialog(message);
+                        EventBus.getDefault().post(event);
+                        EventBus.getDefault().post(new RefreshEvent("来消息了"));
 //                    MyMessageReceiver receiver = new MyMessageReceiver();
-                    Intent intent = new Intent("com.xiaoluogo.goodtochat.REFRESH_MESSAGE");
+                        Intent intent = new Intent("com.xiaoluogo.goodtochat.REFRESH_MESSAGE");
 //                    intentFilter.addAction();
-                    context.sendBroadcast(intent);
+                        context.sendBroadcast(intent);
+                    } catch (DaoException de) {
+                        de.printStackTrace();
+                        L.e(de.getMessage());
+                    }
                 }
             }
         });

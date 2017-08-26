@@ -50,7 +50,6 @@ public class AddressListPagerAdapter extends BaseRecyclerAdapter<Friend> {
     public void onBind(RecyclerView.ViewHolder viewHolder, int realPosition, Friend data) {
         ((ViewHolder) viewHolder).tv_friend_name.setText(mDatas.get(realPosition).getUsername());
         RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.head)
                 .error(R.drawable.default_head);
         Glide.with(context).load(mDatas.get(realPosition).getHeaderImage())
                 .apply(requestOptions)

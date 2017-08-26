@@ -266,7 +266,8 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
     private void updateImage() {
         progress_upload.setVisibility(View.VISIBLE);
         tv_upload.setVisibility(View.VISIBLE);
-        String fileName = user.getNickName() + System.currentTimeMillis();
+//        String fileName = user.getNickName() + System.currentTimeMillis();
+//        currentUri = ZipImageUtil.zipImage(currentUri);
         File localFile = new File(currentUri);
         final BmobFile file = new BmobFile(localFile);
         file.uploadblock(new UploadFileListener() {
@@ -305,7 +306,6 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         });
-
 
     }
 

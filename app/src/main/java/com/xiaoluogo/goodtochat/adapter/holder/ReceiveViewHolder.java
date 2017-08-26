@@ -17,8 +17,6 @@ import com.xiaoluogo.goodtochat.db.ChatMessage;
 import java.text.SimpleDateFormat;
 
 import cn.bmob.newim.bean.BmobIMSendStatus;
-import cn.bmob.newim.core.BmobDownloadManager;
-import cn.bmob.newim.listener.FileDownloadListener;
 
 /**
  * Created by xiaoluogo on 2017/7/28.

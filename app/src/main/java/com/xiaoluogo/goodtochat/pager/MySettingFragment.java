@@ -1,13 +1,12 @@
 package com.xiaoluogo.goodtochat.pager;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.TextView;
 
+import com.xiaoluogo.goodtochat.R;
 import com.xiaoluogo.goodtochat.base.BaseFragment;
+import com.xiaoluogo.goodtochat.doman.UserBean;
 import com.xiaoluogo.goodtochat.utils.L;
+import com.xiaoluogo.waveview.WaveView;
 
 /**
  * 我的相关设置页面
@@ -16,22 +15,23 @@ import com.xiaoluogo.goodtochat.utils.L;
  */
 public class MySettingFragment extends BaseFragment {
 
-    private TextView textView;
+    private WaveView wave_view;
 
     @Override
     public View initView() {
-        textView = new TextView(context);
-        textView.setTextColor(Color.RED);
-        textView.setTextSize(40);
-        textView.setGravity(Gravity.CENTER);
+        View view = View.inflate(context, R.layout.setting_fragment,null);
         L.e("我的相关设置页面====初始化视图完成");
-        return textView;
+        wave_view = (WaveView) view.findViewById(R.id.wave_view);
+        wave_view.setAnimation();
+        UserBean userBean = UserBean.getCurrentUser(UserBean.class);
+        wave_view.setWaveBitmap(userBean.getHeaderImage());
+        return view;
     }
 
     @Override
     public void initData() {
         super.initData();
-        textView.setText("我页面");
+
         L.e("我的相关设置页面====初始化数据完成");
     }
 }

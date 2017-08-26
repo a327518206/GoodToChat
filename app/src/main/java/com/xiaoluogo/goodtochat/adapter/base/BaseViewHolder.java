@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.xiaoluogo.goodtochat.db.ChatMessage;
 
-import cn.bmob.newim.bean.BmobIMAudioMessage;
 import cn.bmob.newim.bean.BmobIMConversation;
 
 /**

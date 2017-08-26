@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 import cn.bmob.newim.BmobIM;
-import cn.bmob.newim.core.BmobIMClient;
 
 /**
  * Created by xiaoluogo on 2017/7/21.

@@ -1,7 +1,6 @@
 package com.xiaoluogo.goodtochat.db;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.xiaoluogo.goodtochat.doman.UserBean;
@@ -12,7 +11,6 @@ import org.litepal.LitePal;
 import org.litepal.LitePalDB;
 import org.litepal.crud.DataSupport;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,7 +53,7 @@ public class NewFriendManager {
         this.uid = uId;
         String DBName = uId + ".dbLP";
 //        this.litePalDB = LitePalDB.fromDefault(DBName);
-        this.litePalDB = new LitePalDB(DBName, 4);
+        this.litePalDB = new LitePalDB(DBName, 5);
         litePalDB.addClassName(Friend.class.getName());
         litePalDB.addClassName(NewFriend.class.getName());
         litePalDB.addClassName(ChatDialog.class.getName());

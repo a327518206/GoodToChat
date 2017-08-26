@@ -19,7 +19,7 @@ public class AddFriendMessage extends BmobIMExtraMessage{
     public AddFriendMessage(){}
 
     /**
-     * 将BmobIMMessage转成NewFriend
+     * 将IMMessage转成NewFriend
      * @param msg 消息
      * @return
      */

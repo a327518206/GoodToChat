@@ -2,9 +2,6 @@ package com.xiaoluogo.goodtochat.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.icu.text.IDNA;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,8 +17,6 @@ import com.xiaoluogo.goodtochat.R;
 import com.xiaoluogo.goodtochat.db.Friend;
 import com.xiaoluogo.goodtochat.db.NewFriendManager;
 import com.xiaoluogo.goodtochat.doman.UserBean;
-import com.xiaoluogo.goodtochat.other.InfoActivity;
-import com.xiaoluogo.goodtochat.utils.BmobUtils;
 import com.xiaoluogo.goodtochat.utils.CacheUtils;
 import com.xiaoluogo.goodtochat.utils.L;
 

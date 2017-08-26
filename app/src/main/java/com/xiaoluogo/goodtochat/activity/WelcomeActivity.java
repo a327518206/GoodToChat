@@ -10,10 +10,20 @@ import com.xiaoluogo.goodtochat.utils.CacheUtils;
 
 public class WelcomeActivity extends AppCompatActivity {
 
+    private long time;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        time = 2000;
+
+        if (!isTaskRoot()) {
+//            time = 0;
+            finish();
+            return;
+        }
+
         final boolean islogin = CacheUtils.getBoolean(this,"isLogin");
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -26,6 +36,6 @@ public class WelcomeActivity extends AppCompatActivity {
                     finish();
                 }
             }
-        },2000);
+        },time);
     }
 }

@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.xiaoluogo.goodtochat.R;
-import com.xiaoluogo.goodtochat.adapter.ChatAdapter;
 import com.xiaoluogo.goodtochat.adapter.base.BaseViewHolder;
 import com.xiaoluogo.goodtochat.adapter.base.OnRecyclerViewListener;
 import com.xiaoluogo.goodtochat.db.ChatMessage;

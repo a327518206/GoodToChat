@@ -14,10 +14,6 @@ import com.xiaoluogo.goodtochat.db.ChatMessage;
 import java.io.File;
 import java.io.FileInputStream;
 
-import cn.bmob.newim.bean.BmobIMAudioMessage;
-import cn.bmob.newim.core.BmobDownloadManager;
-import cn.bmob.v3.BmobUser;
-
 public class NewRecordPlayClickListener implements View.OnClickListener {
 
 	private final String mFilePath;

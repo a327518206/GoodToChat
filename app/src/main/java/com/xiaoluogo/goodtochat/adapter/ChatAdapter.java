@@ -16,7 +16,6 @@ import com.xiaoluogo.goodtochat.db.ChatMessage;
 import java.util.List;
 
 import cn.bmob.newim.bean.BmobIMConversation;
-import cn.bmob.newim.bean.BmobIMMessage;
 
 /**
  * Created by xiaoluogo on 2017/7/27.

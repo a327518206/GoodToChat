@@ -1,6 +1,7 @@
 package com.xiaoluogo.goodtochat.activity;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
@@ -19,6 +20,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,14 +30,15 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.Gson;
 import com.xiaoluogo.goodtochat.BmobIMApplication;
+import com.xiaoluogo.goodtochat.IWeatherService;
 import com.xiaoluogo.goodtochat.R;
 import com.xiaoluogo.goodtochat.base.BaseActivity;
 import com.xiaoluogo.goodtochat.base.BaseFragment;
-import com.xiaoluogo.goodtochat.db.NewFriend;
 import com.xiaoluogo.goodtochat.db.NewFriendManager;
 import com.xiaoluogo.goodtochat.doman.UserBean;
-import com.xiaoluogo.goodtochat.event.RefreshEvent;
+import com.xiaoluogo.goodtochat.doman.WeatherBean;
 import com.xiaoluogo.goodtochat.other.InfoActivity;
 import com.xiaoluogo.goodtochat.other.SearchUserActivity;
 import com.xiaoluogo.goodtochat.pager.AddressListFragment;
@@ -46,11 +49,11 @@ import com.xiaoluogo.goodtochat.utils.CacheUtils;
 import com.xiaoluogo.goodtochat.utils.Constants;
 import com.xiaoluogo.goodtochat.utils.IMMLeaks;
 import com.xiaoluogo.goodtochat.utils.L;
+import com.xiaoluogo.goodtochat.weather.service.WeatherService;
+import com.xiaoluogo.goodtochat.weather.view.WeatherActivity;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,14 +79,16 @@ public class MainActivity extends BaseActivity {
     private NavigationView nav_view;
     private CircleImageView civ_header;
     private TextView nav_nickname;
+    private Button btn_weather;
     private ImageView iv_msg_red_point;
     private ImageView iv_addresslist_red_point;
     private ImageView iv_world_red_point;
 
     private List<BaseFragment> baseFragments;
 
-
     private int position;
+    private IWeatherService service;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +99,35 @@ public class MainActivity extends BaseActivity {
 
         initData();
         initdb();
+        initService();
     }
+
+    private void initService() {
+        intent = new Intent(this, WeatherService.class);
+        intent.setAction("com.xiaoluogo.goodtochat_AUTO_UPDATE_WEATHER");
+        bindService(intent,con, Context.BIND_AUTO_CREATE);
+        startService(intent);
+    }
+
+    private ServiceConnection con = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder iBinder) {
+            service = IWeatherService.Stub.asInterface(iBinder);
+            try {
+                service.autoUpdate();
+                if(WeatherService.updateSuccess){
+                    MainActivity.this.getWeatherFromNet();
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     //初始化数据库
     private void initdb() {
@@ -113,6 +146,7 @@ public class MainActivity extends BaseActivity {
         View layout = nav_view.inflateHeaderView(R.layout.nav_header);
         civ_header = (CircleImageView) layout.findViewById(R.id.civ_header);
         nav_nickname = (TextView) layout.findViewById(R.id.nav_nickname);
+        btn_weather = (Button) layout.findViewById(R.id.btn_weather);
 //        iv_msg_red_point = (ImageView) layout.findViewById(R.id.iv_msg_red_point);
 //        iv_addresslist_red_point = (ImageView) layout.findViewById(R.id.iv_addresslist_red_point);
 
@@ -124,7 +158,13 @@ public class MainActivity extends BaseActivity {
         }
 
         nav_view.setNavigationItemSelectedListener(new MyOnNavigationItemSelectedListener());
-
+        nav_view.getChildAt(nav_view.getChildCount() - 1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, WeatherActivity.class);
+                startActivity(intent);
+            }
+        });
         ib_add_to.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,13 +179,18 @@ public class MainActivity extends BaseActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             drawer_layout.closeDrawers();
+            Intent intent;
             switch (item.getItemId()) {
                 case R.id.nav_my_setting:
                     BmobIMApplication.addDestoryActivity(MainActivity.this, "mainActivity");
-                    Intent intent = new Intent(MainActivity.this, InfoActivity.class);
+                    intent = new Intent(MainActivity.this, InfoActivity.class);
                     intent.putExtra(Constants.INFO_PAGER, Constants.MYSELF_INFO_FROM_LEFTMENU);
                     startActivity(intent);
                     break;
+//                case R.id.btn_weather:
+//                    intent = new Intent(MainActivity.this, WeatherActivity.class);
+//                    startActivity(intent);
+//                    break;
             }
             return true;
         }
@@ -236,8 +281,6 @@ public class MainActivity extends BaseActivity {
                         Toast.makeText(MainActivity.this, "登录失败...请检查网络", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         finish();
-                    } else if (status == ConnectionStatus.DISCONNECT) {
-
                     }
                 }
             });
@@ -258,7 +301,40 @@ public class MainActivity extends BaseActivity {
         rg_bottom_tag.setOnCheckedChangeListener(new MyOnCheckedChangeListener());
         //默认选中第一个页面
         rg_bottom_tag.check(R.id.rb_message);
+
+        getWeatherFromNet();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getWeatherFromNet();
+    }
+
+    private void getWeatherFromNet() {
+        String weatherJson = CacheUtils.getString(this, "weather");
+        if (!TextUtils.isEmpty(weatherJson)) {
+            processData(weatherJson);
+        } else {
+            ((Button)nav_view.getChildAt(nav_view.getChildCount() - 1)).setText("设置天气");
+        }
+    }
+
+    /**
+     * 在网络中获取天气
+     */
+    private void processData(String json) {
+        WeatherBean weatherBean = parseJson(json);
+        String str1 = weatherBean.getResult().get(0).getCity();
+        String str2 = weatherBean.getResult().get(0).getTemperature();
+        ((Button)nav_view.getChildAt(nav_view.getChildCount() - 1)).setText(str1 + " " + str2);
+    }
+
+    private WeatherBean parseJson(String json) {
+        return new Gson().fromJson(json, WeatherBean.class);
+    }
+
+
 
     //    /**
 //     * 设置碎片
@@ -293,10 +369,37 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         //清理导致内存泄露的资源
         BmobIM.getInstance().clear();
         BmobUtils.isFrist = false;
+        if (con != null) {
+//            unbindService(con);
+            con = null;
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        //按返回键返回桌面
+        moveTaskToBack(true);
+    }
+
+    @Override
+    protected void onStop() {
+        if (con != null) {
+            unbindService(con);
+            stopService(intent);
+        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onRestart() {
+        initService();
+        L.e("onRestart==执行了");
+        super.onRestart();
     }
 
     /**
@@ -319,18 +422,17 @@ public class MainActivity extends BaseActivity {
         checkRedPoint();
     }
 
-    /**
-     * 注册自定义消息接收事件
-     *
-     * @param event
-     */
+    //    /**
+//     * 注册自定义消息接收事件
+//     *
+//     * @param event
+//     */
 //    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
 //    public void onRefreshEvent(RefreshEvent event) {
 ////        log("---主页接收到自定义消息---");
 ////        checkRedPoint();
 //        L.e("---主页接收到自定义消息---");
 //    }
-
     private void checkRedPoint() {
         int count = (int) BmobIM.getInstance().getAllUnReadCount();
 //        if (count > 0) {

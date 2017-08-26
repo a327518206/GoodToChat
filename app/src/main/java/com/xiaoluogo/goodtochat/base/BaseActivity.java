@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
-import com.xiaoluogo.goodtochat.event.RefreshEvent;
 
 import org.greenrobot.eventbus.EventBus;
 

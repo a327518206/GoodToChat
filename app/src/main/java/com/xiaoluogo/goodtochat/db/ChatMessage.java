@@ -21,6 +21,16 @@ public class ChatMessage extends DataSupport {
     private String messageTime;
     private String headerImage;
     private int privateOrGroup;
+
+
+    private int isOnce;
+    public int getIsOnce() {
+        return isOnce;
+    }
+
+    public void setIsOnce(int isOnce) {
+        this.isOnce = isOnce;
+    }
     private String duration;
 
     public String getDuration() {

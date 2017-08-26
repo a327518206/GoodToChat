@@ -13,27 +13,14 @@ import android.widget.Toast;
 
 import com.xiaoluogo.goodtochat.R;
 import com.xiaoluogo.goodtochat.db.NewFriend;
-import com.xiaoluogo.goodtochat.db.NewFriendManager;
-import com.xiaoluogo.goodtochat.doman.AgreeAddFriendMessage;
-import com.xiaoluogo.goodtochat.doman.UserBean;
 import com.xiaoluogo.goodtochat.utils.BmobUtils;
 import com.xiaoluogo.goodtochat.utils.Constants;
 import com.xiaoluogo.goodtochat.utils.L;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import cn.bmob.newim.BmobIM;
-import cn.bmob.newim.bean.BmobIMConversation;
-import cn.bmob.newim.bean.BmobIMMessage;
-import cn.bmob.newim.bean.BmobIMUserInfo;
-import cn.bmob.newim.core.BmobIMClient;
-import cn.bmob.newim.listener.MessageSendListener;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * @author :smile

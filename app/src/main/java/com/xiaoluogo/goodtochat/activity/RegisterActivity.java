@@ -22,7 +22,6 @@ import com.xiaoluogo.goodtochat.R;
 import com.xiaoluogo.goodtochat.doman.UserBean;
 import com.xiaoluogo.goodtochat.utils.L;
 
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 

@@ -1,1 +1,1 @@
-include ':app', ':photoview_library', ':bottomnavigation'
+include ':app', ':photoview_library', ':bottomnavigation', ':waveview'

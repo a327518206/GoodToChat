@@ -12,8 +12,6 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 
-import com.xiaoluogo.goodtochat.other.PhotoActivity;
-
 import java.io.File;
 import java.io.IOException;
 

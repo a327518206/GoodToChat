@@ -1,7 +1,6 @@
 package com.xiaoluogo.goodtochat.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.xiaoluogo.goodtochat.R;
-import com.xiaoluogo.goodtochat.activity.ChatActivity;
 import com.xiaoluogo.goodtochat.adapter.base.OnRecyclerViewListener;
 import com.xiaoluogo.goodtochat.db.ChatDialog;
 import com.xiaoluogo.goodtochat.db.Friend;
@@ -22,10 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import cn.bmob.newim.BmobIM;
-import cn.bmob.newim.bean.BmobIMConversation;
-import cn.bmob.newim.bean.BmobIMUserInfo;
 
 /**
  * 消息页面适配器

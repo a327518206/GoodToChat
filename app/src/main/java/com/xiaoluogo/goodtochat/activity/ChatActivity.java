@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -37,7 +36,6 @@ import com.xiaoluogo.goodtochat.R;
 import com.xiaoluogo.goodtochat.adapter.ChatAdapter;
 import com.xiaoluogo.goodtochat.db.ChatMessage;
 import com.xiaoluogo.goodtochat.doman.UserBean;
-import com.xiaoluogo.goodtochat.other.PhotoActivity;
 import com.xiaoluogo.goodtochat.utils.BmobUtils;
 import com.xiaoluogo.goodtochat.utils.Constants;
 import com.xiaoluogo.goodtochat.utils.L;
@@ -493,8 +491,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 return;
             }
             cmsg.setSendOrReceive(2);
-            cmsg.save();
-            if (adapter.findPosition(cmsg.getId()) < 0) {//如果未添加到界面中
+//            boolean isOnce = BmobUtils.getInstance().saveChatMsg2DB(cmsg);
+            if (adapter.findPosition(cmsg.getId()) < 0 ) {//如果未添加到界面中
                 adapter.addMessage(cmsg);
                 //更新该会话下面的已读状态
                 c.updateReceiveStatus(msg);

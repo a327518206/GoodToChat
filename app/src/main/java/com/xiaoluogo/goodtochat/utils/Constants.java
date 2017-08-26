@@ -52,4 +52,10 @@ public class Constants {
      * 相册中选择图片
      */
     public static final int CHOOSE_PHOTO = 2;
+
+    public static final String BASE_WEATHER_URL = "http://apicloud.mob.com/v1/weather/citys?key=";
+    public static final String MOB_APPKEY = "1f84fd9ff30ec";
+
+    public static final String WEATHER_URL ="http://apicloud.mob.com/v1/weather/query?key="+MOB_APPKEY+"&city=";
+    public static final String WEATHER_CITY = BASE_WEATHER_URL + MOB_APPKEY;
 }

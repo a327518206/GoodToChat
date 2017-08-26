@@ -3,9 +3,7 @@ package com.xiaoluogo.goodtochat.other;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.text.TextUtilsCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -21,12 +19,10 @@ import com.xiaoluogo.goodtochat.R;
 import com.xiaoluogo.goodtochat.doman.UserBean;
 import com.xiaoluogo.goodtochat.utils.BmobUtils;
 import com.xiaoluogo.goodtochat.utils.Constants;
-import com.xiaoluogo.goodtochat.utils.L;
 
 import java.util.List;
 
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.exception.BmobException;
 
