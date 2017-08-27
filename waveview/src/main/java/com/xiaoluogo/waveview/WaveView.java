@@ -133,7 +133,7 @@ public class WaveView extends View {
     private void setPathData() {
         path.reset();
         int halfWaveLength = wave_length / 2;
-        path.rMoveTo(-wave_length + dX, originY );
+        path.rMoveTo(-wave_length + dX, originY);
         for (int i = -wave_length; i < width + wave_length; i += wave_length) {
             path.rQuadTo(halfWaveLength / 2, -wave_height, halfWaveLength, 0);
             path.rQuadTo(halfWaveLength / 2, wave_height, halfWaveLength, 0);
@@ -169,18 +169,20 @@ public class WaveView extends View {
     }
 
     public void setWaveBitmap(String url) {
-        utils.getBitmap(url, 0, new OnBitmapCacheListener() {
-            @Override
-            public void onSuccess(Bitmap bitmap) {
-                header_image = BitmapUtils.changeSize(getContext(), bitmap);
-                header_image = BitmapUtils.makeRoundCorner(header_image, DensityUtil.dip2px(getContext(), 40));
-                postInvalidate();
-            }
+        if (url != null) {
+            utils.getBitmap(url, 0, new OnBitmapCacheListener() {
+                @Override
+                public void onSuccess(Bitmap bitmap) {
+                    header_image = BitmapUtils.changeSize(getContext(), bitmap);
+                    header_image = BitmapUtils.makeRoundCorner(header_image, DensityUtil.dip2px(getContext(), 40));
+                    postInvalidate();
+                }
 
-            @Override
-            public void onFailure(Exception e) {
-                e.printStackTrace();
-            }
-        });
+                @Override
+                public void onFailure(Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 }

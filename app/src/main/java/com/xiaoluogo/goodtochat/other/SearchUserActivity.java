@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.xiaoluogo.goodtochat.R;
 import com.xiaoluogo.goodtochat.doman.UserBean;
 import com.xiaoluogo.goodtochat.utils.BmobUtils;
@@ -108,6 +109,7 @@ public class SearchUserActivity extends AppCompatActivity {
                                         tv_search_result.setVisibility(View.GONE);
                                         rlSearchFriendInfo.setVisibility(View.VISIBLE);
                                         tvFriendName.setText(findUser.getNickName());
+                                        Glide.with(SearchUserActivity.this).load(findUser.getHeaderImage()).into(ivFriendHeader);
                                     }
                                 }
                             }

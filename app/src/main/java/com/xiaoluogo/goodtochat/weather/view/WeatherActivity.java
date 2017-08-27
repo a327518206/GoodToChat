@@ -142,7 +142,7 @@ public class WeatherActivity extends AppCompatActivity implements IWeatherView {
             for (CityBean.ResultBean result : city) {
                 provinces.add(result.getProvince());
             }
-            spin_province.setAdapter(new ArrayAdapter<String>(WeatherActivity.this, android.R.layout.simple_list_item_1, provinces));
+            spin_province.setAdapter(new ArrayAdapter<>(WeatherActivity.this, android.R.layout.simple_list_item_1, provinces));
             spin_province.setOnItemSelectedListener(new ProvinceSelectedListener());
             spin_city.setOnItemSelectedListener(new CitySelectedListener());
             cacheProvince = CacheUtils.getInt(this,"provincePosition");
@@ -175,7 +175,7 @@ public class WeatherActivity extends AppCompatActivity implements IWeatherView {
             for (CityBean.ResultBean.City c : city.get(position).getCities()) {
                 cities.add(c.getCityName());
             }
-            spin_city.setAdapter(new ArrayAdapter<String>(WeatherActivity.this, android.R.layout.simple_list_item_1, cities));
+            spin_city.setAdapter(new ArrayAdapter<>(WeatherActivity.this, android.R.layout.simple_list_item_1, cities));
             provincePosition = position;
         }
 
@@ -265,6 +265,12 @@ public class WeatherActivity extends AppCompatActivity implements IWeatherView {
             Glide.with(this).load(url).into(iv_weather_bg);
         }
         hideRefresh();
+    }
+
+    @Override
+    protected void onDestroy() {
+        weatherPresenter.removeMessage();
+        super.onDestroy();
     }
 }
 

@@ -2,6 +2,7 @@ package com.xiaoluogo.goodtochat.weather.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -117,6 +118,11 @@ public class WeatherPresenter implements IWeatherPresenter {
                 L.e(e.getMessage());
             }
         });
+    }
+
+    @Override
+    public void removeMessage() {
+        handler.removeCallbacksAndMessages(null);
     }
 
     private void processWeatherData(String json) {

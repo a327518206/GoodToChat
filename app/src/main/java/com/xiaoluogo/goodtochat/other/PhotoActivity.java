@@ -82,14 +82,7 @@ public class PhotoActivity extends AppCompatActivity implements View.OnClickList
      * 更新进度
      */
     private static final int UPDATE_PROGRESS = 3;
-//    /**
-//     * 打开相机
-//     */
-//    private static final int TAKE_PHOTO = 1;
-//    /**
-//     * 相册中选择图片
-//     */
-//    public static final int CHOOSE_PHOTO = 2;
+
     private Toolbar toolbarPhoto;
     private TextView tvPhotoTitle;
     private Button btnChangeHeader;

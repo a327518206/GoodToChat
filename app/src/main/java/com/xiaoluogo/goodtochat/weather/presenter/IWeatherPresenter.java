@@ -8,4 +8,5 @@ public interface IWeatherPresenter {
     void showDialog();
     void showWeather();
     void getBingPic();
+    void removeMessage();
 }
